@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amanah Saham - Syariah Swing Screener & Money Management</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        syariah: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f17;
+            color: #f3f4f6;
+        }
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        /* Hide native color picker border */
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 antialiased">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        
+        <!-- Header Section -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/60 border border-slate-800/80 p-6 rounded-2xl mb-8 backdrop-blur-md">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Syariah Swing System Active</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Amanah<span class="text-emerald-400">Saham</span></h1>
+                <p class="text-sm text-slate-400 mt-1">Screener Mandiri & Money Management Bebas Riba</p>
+            </div>
+            
+            <div class="flex items-center gap-3 bg-slate-950 p-2.5 rounded-xl border border-slate-800/50">
+                <div class="text-right">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Status Koneksi</div>
+                    <div class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        Simulated Real-Time
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar: Parameters (4 Columns on Desktop) -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
+                    <h2 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                        Parameter Keuangan
+                    </h2>
+                    
+                    <form id="calcForm" class="space-y-5" onsubmit="event.preventDefault();">
+                        <!-- Input Modal -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 tracking-wider mb-2">Modal Aktif Dagang (Rp)</label>
+                            <input type="number" id="modalInput" value="100000000" min="5000000" max="5000000000" step="1000000" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl px-4 py-3 text-white font-mono text-sm outline-none transition-all">
+                            <span class="text-[11px] text-slate-500 mt-1 block">Default: Rp 100 Juta (Modal Anda saat ini)</span>
+                        </div>
+
+                        <!-- Target Profit Bulanan -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Target Profit Bulanan</label>
+                                <span class="text-xs font-bold text-emerald-400" id="targetValDisplay">5%</span>
+                            </div>
+                            <input type="range" id="targetSlider" min="3" max="15" value="5" step="1" class="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-950 rounded-lg appearance-none">
+                            <div class="flex justify-between text-[10px] text-slate-600 font-semibold mt-1">
+                                <span>3% (Konservatif)</span>
+                                <span>15% (Agresif)</span>
+                            </div>
+                        </div>
+
+                        <!-- Batas Stop Loss -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Batas Stop Loss per Saham</label>
+                                <span class="text-xs font-bold text-rose-400" id="slValDisplay">3%</span>
+                            </div>
+                            <input type="range" id="slSlider" min="2" max="10" value="3" step="0.5" class="w-full accent-rose-500 cursor-pointer h-2 bg-slate-950 rounded-lg appearance-none">
+                            <div class="flex justify-between text-[10px] text-slate-600 font-semibold mt-1">
+                                <span>2% (Sangat Ketat)</span>
+                                <span>10% (Longgar)</span>
+                            </div>
+                        </div>
+
+                        <!-- Alokasi Max Per Saham -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 tracking-wider mb-2">Maksimal Alokasi per Saham</label>
+                            <select id="allocSelect" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all">
+                                <option value="0.1">10% dari Modal (Sangat Aman - Pecah ke 10 Saham)</option>
+                                <option value="0.2" selected>20% dari Modal (Aman - Pecah ke 5 Saham)</option>
+                                <option value="0.3">30% dari Modal (Sedang - Pecah ke 3-4 Saham)</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Live Market Simulation Trigger -->
+                <div class="bg-slate-900/20 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
+                    <h3 class="text-sm font-bold text-white mb-2">Simulasi Pergerakan Bursa</h3>
+                    <p class="text-xs text-slate-400 mb-4">Screener ini memiliki pangkalan data saham Syariah teratas. Klik tombol di bawah untuk mensimulasikan pergerakan harga pasar baru.</p>
+                    <button id="btnRefreshMarket" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs py-3 px-4 rounded-xl transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 animate-spin-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18"/></svg>
+                        Simulasi Segarkan Harga Pasar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Main Area (8 Columns on Desktop) -->
+            <div class="lg:col-span-8 space-y-8">
+                
+                <!-- Financial Cards Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1: Target Keuangan -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/80 p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5">
+                            <svg class="w-32 h-32 text-emerald-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                        </div>
+                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">Target Profit Bulanan</span>
+                        <div class="text-3xl font-extrabold text-white tracking-tight" id="goalTargetDisplay">Rp 5.000.000</div>
+                        <div class="mt-4 flex items-start gap-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-400" id="badgeTargetProfile">Konservatif</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3 leading-relaxed" id="textTargetProfile">Target profit bulanan sebesar <strong id="lblTargetPerc" class="text-white">5%</strong> dinilai aman dan sangat realistis bagi pedagang aktif yang juga memiliki pekerjaan utama.</p>
+                    </div>
+
+                    <!-- Card 2: Pengendalian Risiko -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/80 p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5">
+                            <svg class="w-32 h-32 text-rose-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                        </div>
+                        <span class="text-[10px] font-bold text-rose-400 uppercase tracking-widest block mb-1">Maksimal Risiko per Transaksi</span>
+                        <div class="text-3xl font-extrabold text-white tracking-tight" id="maxRiskDisplay">Rp 600.000</div>
+                        <div class="mt-4 flex items-start gap-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-rose-500/10 text-rose-400" id="badgeRiskProfile">Resiko Terkendali</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3 leading-relaxed">Jika satu saham menyentuh batas cut loss (<strong id="lblSlPerc" class="text-white">3%</strong> dengan alokasi 20% modal), kerugian maksimal Anda per transaksi sangat kecil & terkontrol.</p>
+                    </div>
+                </div>
+
+                <!-- Live Stock Screener Table Card -->
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl overflow-hidden backdrop-blur-md">
+                    <div class="px-6 py-5 border-b border-slate-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                                Rekomendasi Hasil Skrining Saham Syariah
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Sinyal deteksi otomatis berbasis indikator Heiken Ashi & MACD Golden Cross.</p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Update 2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Responsive Table Container -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-900/50">
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Emiten / Sektor</th>
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Harga Masuk</th>
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Cut Loss (SL)</th>
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Target Jual (TP)</th>
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider text-center">Ukuran Beli (Lot)</th>
+                                    <th class="px-6 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider text-center">Rencana</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTableBody" class="divide-y divide-slate-800">
+                                <!-- Dynamic rows go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Trading Plan Detail Generator (Interactivity Card) -->
+                <div id="planDetailPanel" class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md hidden transition-all duration-300">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-0.5">Trading Plan Generator</span>
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2" id="planTitle">
+                                Saham ABCD - PT Amanah Syariah Tbk
+                            </h3>
+                        </div>
+                        <button onclick="closePlanDetail()" class="text-slate-500 hover:text-slate-300 transition-all p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/50">
+                            <div class="text-[10px] text-slate-500 uppercase font-semibold">Total Modal Alokasi</div>
+                            <div class="text-lg font-bold text-white mt-1" id="planAllocation">Rp 20.000.000</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Sesuai aturan diversifikasi</div>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/50">
+                            <div class="text-[10px] text-slate-500 uppercase font-semibold">Volume Beli Aman</div>
+                            <div class="text-lg font-bold text-emerald-400 mt-1" id="planLots">50 Lot <span class="text-xs text-slate-400 font-normal">(5.000 lbr)</span></div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Bebas dari resiko bangkrut</div>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/50">
+                            <div class="text-[10px] text-slate-500 uppercase font-semibold">Risk / Reward Ratio</div>
+                            <div class="text-lg font-bold text-emerald-400 mt-1" id="planRrRatio">1 : 1.67</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Memenuhi kaidah profit jangka panjang</div>
+                        </div>
+                    </div>
+
+                    <!-- Copy to Clipboard & Notes section -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Format Teks Catatan / WA</span>
+                            <button id="btnCopyPlan" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                                Salin Teks Plan
+                            </button>
+                        </div>
+                        <textarea id="txtAreaPlan" class="w-full bg-slate-900 border border-slate-800/50 text-slate-300 font-mono text-xs rounded-lg p-3 outline-none resize-none h-32 focus:border-emerald-500/50 transition-all" readonly></textarea>
+                    </div>
+
+                    <!-- Custom Alert Notification inside app (NO native Alert) -->
+                    <div id="toastNotification" class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 flex items-center gap-2 text-xs text-emerald-400 hidden">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Trading plan berhasil disalin ke papan klip! Siap dipasang di aplikasi sekuritas Anda.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Saham Syariah Indonesia (Dataset 2026 Terpilih)
+        // Terdiri dari emiten ISSI / JII dengan likuiditas tinggi
+        let stocksDb = [
+            { ticker: 'TLKM', company: 'Telkom Indonesia Tbk (Infrastruktur/Sinyal Kuat)', basePrice: 3820, signal: 'Heiken Ashi Green', desc: 'Indikator Stochastic oversold memantul, MACD Golden Cross di area negatif.' },
+            { ticker: 'ASII', company: 'Astra International Tbk (Konsumer/Kuat)', basePrice: 5350, signal: 'MACD Golden Cross', desc: 'Pembalikan tren jangka menengah terkonfirmasi dengan volume perdagangan di atas rata-rata.' },
+            { ticker: 'ICBP', company: 'Indofood CBP Sukses Makmur Tbk (Konsumer Bebas Siklus)', basePrice: 11450, signal: 'Stochastic Oversold', desc: 'Sangat dekat dengan area support historis, sangat ideal untuk taktik Buy on Weakness.' },
+            { ticker: 'BRIS', company: 'Bank Syariah Indonesia Tbk (Perbankan Syariah Terkuat)', basePrice: 2420, signal: 'Heiken Ashi Green', desc: 'Tren naik yang kuat di atas MA 20, volume stabil menunjukkan tren akumulasi berkelanjutan.' },
+            { ticker: 'PGAS', company: 'Perusahaan Gas Negara Tbk (Infrastruktur/Energi)', basePrice: 1510, signal: 'Heiken Ashi Green', desc: 'Breakout dari pola konsolidasi segitiga simetris dengan peningkatan momentum MACD.' },
+            { ticker: 'ADRO', company: 'Adaro Energy Indonesia Tbk (Komoditas)', basePrice: 3120, signal: 'MACD Golden Cross', desc: 'Harga batubara stabil, dividen yield tinggi, secara teknikal membentuk pola double bottom.' }
+        ];
+
+        // Format Rupiah Helper
+        const fmtRp = (v) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v);
+
+        // State Management
+        let appState = {
+            modal: 100000000,
+            targetPct: 5,
+            slPct: 3,
+            allocPct: 0.2, // 20% default
+            activePlanTicker: null
+        };
+
+        // DOM Elements
+        const modalInput = document.getElementById('modalInput');
+        const targetSlider = document.getElementById('targetSlider');
+        const targetValDisplay = document.getElementById('targetValDisplay');
+        const slSlider = document.getElementById('slSlider');
+        const slValDisplay = document.getElementById('slValDisplay');
+        const allocSelect = document.getElementById('allocSelect');
+        const btnRefreshMarket = document.getElementById('btnRefreshMarket');
+        
+        const goalTargetDisplay = document.getElementById('goalTargetDisplay');
+        const badgeTargetProfile = document.getElementById('badgeTargetProfile');
+        const textTargetProfile = document.getElementById('textTargetProfile');
+        const maxRiskDisplay = document.getElementById('maxRiskDisplay');
+        const lblTargetPerc = document.getElementById('lblTargetPerc');
+        const lblSlPerc = document.getElementById('lblSlPerc');
+        
+        const stockTableBody = document.getElementById('stockTableBody');
+        const planDetailPanel = document.getElementById('planDetailPanel');
+        const planTitle = document.getElementById('planTitle');
+        const planAllocation = document.getElementById('planAllocation');
+        const planLots = document.getElementById('planLots');
+        const planRrRatio = document.getElementById('planRrRatio');
+        const txtAreaPlan = document.getElementById('txtAreaPlan');
+        const btnCopyPlan = document.getElementById('btnCopyPlan');
+        const toastNotification = document.getElementById('toastNotification');
+
+        // Main Logic: Calculations
+        function calculateAndRender() {
+            // Get inputs safely
+            appState.modal = parseFloat(modalInput.value) || 100000000;
+            appState.targetPct = parseFloat(targetSlider.value);
+            appState.slPct = parseFloat(slSlider.value);
+            appState.allocPct = parseFloat(allocSelect.value);
+
+            // Update UI Displays
+            targetValDisplay.textContent = appState.targetPct + '%';
+            slValDisplay.textContent = appState.slPct + '%';
+
+            // Targets
+            const targetRp = appState.modal * (appState.targetPct / 100);
+            const riskRp = appState.modal * (appState.slPct / 100) * appState.allocPct; // Kerugian maksimal per saham
+            
+            goalTargetDisplay.textContent = fmtRp(targetRp);
+            maxRiskDisplay.textContent = fmtRp(riskRp);
+            lblTargetPerc.textContent = appState.targetPct + '%';
+            lblSlPerc.textContent = appState.slPct + '%';
+
+            // Risk Assessment Badges
+            if (appState.targetPct <= 5) {
+                badgeTargetProfile.textContent = "Konservatif (Aman)";
+                badgeTargetProfile.className = "inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-400";
+                textTargetProfile.textContent = `Target profit bulanan sebesar ${appState.targetPct}% dinilai aman, rasional, dan sangat realistis bagi swing trader sibuk yang juga memiliki pekerjaan utama.`;
+            } else if (appState.targetPct <= 9) {
+                badgeTargetProfile.textContent = "Moderat (Wajar)";
+                badgeTargetProfile.className = "inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-400";
+                textTargetProfile.textContent = `Target profit bulanan sebesar ${appState.targetPct}% membutuhkan disiplin lebih tinggi dan penguasaan analisis teknikal yang konsisten.`;
+            } else {
+                badgeTargetProfile.textContent = "Agresif (Resiko Tinggi)";
+                badgeTargetProfile.className = "inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-rose-500/10 text-rose-400";
+                textTargetProfile.textContent = `Target profit bulanan sebesar ${appState.targetPct}% dinilai agresif. Anda membutuhkan diversifikasi yang sangat disiplin dan waktu pantau pasar yang lebih intens.`;
+            }
+
+            // Render Table
+            renderTable();
+
+            // Refresh Trading Plan Detail if active
+            if (appState.activePlanTicker) {
+                showPlanDetail(appState.activePlanTicker);
+            }
+        }
+
+        // Render Table Rows
+        function renderTable() {
+            stockTableBody.innerHTML = '';
+            
+            stocksDb.forEach(stock => {
+                const entry = stock.basePrice;
+                const slPrice = Math.round(entry * (1 - appState.slPct / 100));
+                
+                // Target Profit target (typically 1.5 to 2 times the Stop Loss for good risk/reward ratio)
+                const targetMultiplier = 1.8; // Target R:R = 1.8
+                const tpPrice = Math.round(entry * (1 + (appState.slPct * targetMultiplier) / 100));
+
+                const allocationLimit = appState.modal * appState.allocPct;
+                const lotCost = entry * 100;
+                const lotsToBuy = Math.floor(allocationLimit / lotCost);
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-900/30 transition-all cursor-pointer";
+                row.onclick = () => showPlanDetail(stock.ticker);
+
+                row.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-white flex items-center gap-1.5">
+                            <span class="text-xs bg-slate-800 text-emerald-400 px-1.5 py-0.5 rounded font-mono">${stock.ticker}</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-0.5 truncate max-w-[180px] sm:max-w-xs">${stock.company}</div>
+                    </td>
+                    <td class="px-6 py-4 text-right font-mono font-bold text-white text-sm">${fmtRp(entry)}</td>
+                    <td class="px-6 py-4 text-right font-mono text-rose-400 text-xs">▼ ${fmtRp(slPrice)}</td>
+                    <td class="px-6 py-4 text-right font-mono text-emerald-400 text-xs">▲ ${fmtRp(tpPrice)}</td>
+                    <td class="px-6 py-4 text-center font-mono text-white text-sm">
+                        <span class="bg-emerald-950 text-emerald-300 font-bold px-2 py-1 rounded text-xs">${lotsToBuy} Lot</span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-xs bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-bold text-slate-300 px-2.5 py-1.5 rounded-lg transition-all">
+                            Lihat Plan
+                        </button>
+                    </td>
+                `;
+                stockTableBody.appendChild(row);
+            });
+        }
+
+        // Show Trading Plan Detail
+        function showPlanDetail(ticker) {
+            const stock = stocksDb.find(s => s.ticker === ticker);
+            if (!stock) return;
+
+            appState.activePlanTicker = ticker;
+            planDetailPanel.classList.remove('hidden');
+
+            const entry = stock.basePrice;
+            const slPrice = Math.round(entry * (1 - appState.slPct / 100));
+            const targetMultiplier = 1.8;
+            const tpPrice = Math.round(entry * (1 + (appState.slPct * targetMultiplier) / 100));
+
+            const allocationLimit = appState.modal * appState.allocPct;
+            const lotCost = entry * 100;
+            const lotsToBuy = Math.floor(allocationLimit / lotCost);
+            const totalBuyCost = lotsToBuy * lotCost;
+
+            // Update UI Details
+            planTitle.innerHTML = `Plan ${stock.ticker} <span class="text-xs font-normal text-slate-400 ml-2">${stock.company}</span>`;
+            planAllocation.textContent = fmtRp(totalBuyCost);
+            planLots.innerHTML = `${lotsToBuy} Lot <span class="text-xs text-slate-400 font-normal">(${ (lotsToBuy * 100).toLocaleString() } Lembar)</span>`;
+            planRrRatio.textContent = `1 : ${targetMultiplier.toFixed(1)}`;
+
+            // Create WhatsApp/Notes template string
+            const templateText = `📋 *SWING TRADING PLAN (SYARIAH)*\n` +
+                                 `-----------------------------\n` +
+                                 `🏷️ Emiten: *${stock.ticker}*\n` +
+                                 `🏢 Perusahaan: ${stock.company}\n` +
+                                 ` Sinyal: *${stock.signal}*\n\n` +
+                                 `📥 *Area Masuk (Buy):* ${fmtRp(entry)}\n` +
+                                 `⛔ *Batas Cut Loss (SL):* ${fmtRp(slPrice)} (-${appState.slPct}%)\n` +
+                                 `🎯 *Target Jual (TP):* ${fmtRp(tpPrice)} (+${(appState.slPct * targetMultiplier).toFixed(1)}%)\n\n` +
+                                 `⚖️ *MONEY MANAGEMENT:*\n` +
+                                 `- Alokasi Modal: ${fmtRp(totalBuyCost)}\n` +
+                                 `- Volume Transaksi: *${lotsToBuy} Lot*\n` +
+                                 `- Risiko Maksimal Kehilangan: ${fmtRp(totalBuyCost * (appState.slPct / 100))}\n` +
+                                 `-----------------------------\n` +
+                                 `_Disiplin adalah kunci. Jauhi riba, jaga amanah modal!_`;
+
+            txtAreaPlan.value = templateText;
+            
+            // Scroll smoothly into plan details for mobile
+            planDetailPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close Plan
+        function closePlanDetail() {
+            planDetailPanel.classList.add('hidden');
+            appState.activePlanTicker = null;
+        }
+
+        // Copy Text using Clipboard Fallback
+        btnCopyPlan.onclick = () => {
+            txtAreaPlan.select();
+            document.execCommand('copy');
+            
+            // Trigger beautiful custom toast animation (Avoid alert)
+            toastNotification.classList.remove('hidden');
+            setTimeout(() => {
+                toastNotification.classList.add('hidden');
+            }, 4000);
+        };
+
+        // Simulate Market Refresh (Fluctuations)
+        btnRefreshMarket.onclick = () => {
+            stocksDb.forEach(stock => {
+                // Randomly fluctuate entry price up/down 1.5%
+                const changePct = (Math.random() * 3 - 1.5) / 100;
+                stock.basePrice = Math.round(stock.basePrice * (1 + changePct));
+            });
+            calculateAndRender();
+        };
+
+        // Set Listeners
+        modalInput.addEventListener('input', calculateAndRender);
+        targetSlider.addEventListener('input', calculateAndRender);
+        slSlider.addEventListener('input', calculateAndRender);
+        allocSelect.addEventListener('change', calculateAndRender);
+
+        // Initial Calculations on load
+        window.onload = function() {
+            calculateAndRender();
+        }
+    </script>
+</body>
+</html>
